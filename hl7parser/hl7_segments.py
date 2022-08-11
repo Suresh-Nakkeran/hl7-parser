@@ -21,10 +21,10 @@ segment_maps = {
         make_cell_type("receiving_facility"),
         make_cell_type("message_datetime", options={"repeats": True, "type": HL7Datetime}),
         make_cell_type("security"),
-        make_cell_type("message_type", options={"required": True, "type": HL7_MessageType}),
+        make_cell_type("message_type", options={"type": HL7_MessageType}),
         make_cell_type("message_control_id", options={"required": True}),
-        make_cell_type("processing_id", options={"required": True, "type": HL7_ProcessingType}),
-        make_cell_type("version_id", options={"required": True, "type": HL7_VersionIdentifier}),
+        make_cell_type("processing_id", options={"type": HL7_ProcessingType}),
+        make_cell_type("version_id", options={"type": HL7_VersionIdentifier}),
         make_cell_type("sequence_number"),
         make_cell_type("accept_acknowledgment_type"),
         make_cell_type("application_acknowledgment_type"),
@@ -45,7 +45,7 @@ segment_maps = {
     ],
     "EVN": [
         make_cell_type("event_type_code"),
-        make_cell_type("recorded_datetime", options={"required": True, "type": HL7Datetime}),
+        make_cell_type("recorded_datetime", options={"type": HL7Datetime}),
         make_cell_type("datetime_planned_event", options={"type": HL7Datetime}),
         make_cell_type("event_reason_code", options={"type": HL7_CodedWithException}),
         make_cell_type("operator_id", options={"repeats": True}),
@@ -58,12 +58,12 @@ segment_maps = {
         make_cell_type("patient_id"),
         make_cell_type(
             "patient_identifier_list",
-            options={"required": True, "repeats": True, "type": HL7_ExtendedCompositeId},
+            options={"repeats": True, "type": HL7_ExtendedCompositeId},
         ),
         make_cell_type("alternate_patient_id_pid"),
         make_cell_type(
             "patient_name",
-            options={"required": True, "repeats": True, "type": HL7_ExtendedPersonName},
+            options={"repeats": True, "type": HL7_ExtendedPersonName},
         ),
         make_cell_type(
             "mothers_maiden_name", options={"repeats": True, "type": HL7_ExtendedPersonName}
@@ -113,7 +113,7 @@ segment_maps = {
     "MRG": [
         make_cell_type(
             "prior_patient_identifier_list",
-            options={"required": True, "repeats": True, "type": HL7_ExtendedCompositeId},
+            options={"repeats": True, "type": HL7_ExtendedCompositeId},
         ),
         make_cell_type("prior_alternate_patient_id"),
         make_cell_type("prior_patient_account_number"),
@@ -227,7 +227,7 @@ segment_maps = {
         ),
         make_cell_type(
             "insurance_company_id",
-            options={"type": HL7_ExtendedCompositeId, "required": True, "repeats": True},
+            options={"type": HL7_ExtendedCompositeId, "repeats": True},
         ),
         make_cell_type("insurance_company_name"),
         make_cell_type("insurance_company_address"),
@@ -249,6 +249,67 @@ segment_maps = {
             options={"type": HL7_ExtendedAddress, "required": False, "repeats": False},
         ),
         make_cell_type("policy_number", index=35)
+        # NOTE: standard defines more fields which can be added if needed in
+        # the future
+    ],
+    "ORC": [
+        make_cell_type("order_control"),
+        make_cell_type("placer_order_number"),
+        # NOTE: standard defines more fields which can be added if needed in
+        # the future
+    ],
+    "NTE": [
+        make_cell_type("sed_id"),
+        make_cell_type("source_of_comment"),
+        make_cell_type("comment", options={"repeats": True}),
+        make_cell_type("comment_type", options={"type": HL7_CodedWithException}),
+        make_cell_type("entered_by",
+            options={"type": hl7_data_types.HL7_XCN_ExtendedCompositeID},
+        ),
+        make_cell_type("entered_date", options={"type": HL7Datetime}),
+        make_cell_type("effective_start_date", options={"type": HL7Datetime}),
+        make_cell_type("expiration_date", options={"type": HL7Datetime}),
+    ],
+    "AL1": [
+        make_cell_type("sed_id"),
+        make_cell_type("allergen_type_code", options={"type": HL7_CodedWithException}),
+        make_cell_type("allergen_code", options={"type": HL7_CodedWithException}),
+        make_cell_type("allergy_severity_code", options={"type": HL7_CodedWithException}),
+        make_cell_type("allergy_reaction_code", options={"repeats": True}),
+        make_cell_type("idendification_date"),
+    ],
+    "DG1": [
+        make_cell_type("sed_id"),
+        make_cell_type("diagnosis_coding_method"),
+        make_cell_type("diagnosis_code", options={"type": HL7_CodedWithException}),
+        make_cell_type("diagnosis_description"),
+        make_cell_type("diagnosis_date", options={"type": HL7Datetime}),
+        make_cell_type("diagnosis_type", options={"type": HL7_CodedWithException}),
+        make_cell_type("major_diagnostic_category"),
+        make_cell_type("diagnostic_related_group"),
+        make_cell_type("drug_approval_indicator"),
+        make_cell_type("drug_grouper_review_code"),
+        make_cell_type("outlier_type"),
+        make_cell_type("outlier_days"),
+        make_cell_type("outlier_cost"),
+        make_cell_type("grouper_version_and_type"),
+        # NOTE: standard defines more fields which can be added if needed in
+        # the future
+    ],
+    "GT1": [
+        make_cell_type("sed_id"),
+        make_cell_type("guarantor_number", options={"type": HL7_ExtendedCompositeId, "repeats": True}),
+        make_cell_type("guarantor_name", options={"type": HL7_ExtendedPersonName, "repeats": True}),
+        make_cell_type("guarantor_spouse_name", options={"type": HL7_ExtendedPersonName, "repeats": True}),
+        make_cell_type("guarantor_address",
+            options={"type": HL7_ExtendedAddress, "repeats": True},
+        ),
+        make_cell_type("guarantor_phone_number_home", options={"repeats": True}),
+        make_cell_type("guarantor_phone_number_business", options={"repeats": True}),
+        make_cell_type("guarantor_date_of_birth", options={"type": HL7Datetime}),
+        make_cell_type("guarantor_administrative_sex", options={"type": HL7_CodedWithException}),
+        make_cell_type("guarantor_type", options={"type": HL7_CodedWithException}),
+        make_cell_type("guarantor_relationship", options={"type": HL7_CodedWithException}),
         # NOTE: standard defines more fields which can be added if needed in
         # the future
     ],
